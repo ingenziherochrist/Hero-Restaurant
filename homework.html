@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hero Restaurant</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f4f4f4;
+}
+
+/* AUTH */
+.center{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836') center/cover;
+}
+
+.box{
+  background:white;
+  padding:20px;
+  width:320px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  background:darkred;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+.link{
+  text-align:center;
+  margin-top:10px;
+  color:blue;
+  cursor:pointer;
+}
+
+/* APP */
+#app{
+  display:none;
+}
+
+header{
+  background:#111;
+  color:white;
+  text-align:center;
+  padding:15px;
+}
+
+nav{
+  background:darkred;
+  text-align:center;
+  padding:10px;
+}
+
+nav a{
+  color:white;
+  margin:15px;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+.card img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+}
+
+.card h3{
+  padding:10px;
+}
+
+/* CART */
+.cart{
+  background:white;
+  margin:20px;
+  padding:15px;
+  border-radius:10px;
+}
+
+footer{
+  background:#111;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIGNUP -->
+<div id="signupPage" class="center">
+  <div class="box">
+    <h2>Create Account</h2>
+    <input id="su_user" placeholder="Username">
+    <input id="su_pass" type="password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <div class="link" onclick="showLogin()">Already have account? Login</div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage" class="center" style="display:none;">
+  <div class="box">
+    <h2>Login</h2>
+    <input id="li_user" placeholder="Username">
+    <input id="li_pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="link" onclick="showSignup()">Create account</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<header>
+  <h1>Hero Restaurant</h1>
+</header>
+
+<nav>
+  <a onclick="goMenu()">Menu</a>
+  <a href="#cart">Cart</a>
+</nav>
+
+<!-- MENU -->
+<div class="menu">
+
+  <div class="card" onclick="add('Pizza',12000)">
+    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38">
+    <h3>Pizza - 12,000 RWF</h3>
+  </div>
+
+  <div class="card" onclick="add('Burger',8000)">
+    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+    <h3>Burger - 8,000 RWF</h3>
+  </div>
+
+  <div class="card" onclick="add('Chicken & Fries',10000)">
+    <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+    <h3>Chicken & Fries - 10,000 RWF</h3>
+  </div>
+
+  <div class="card" onclick="add('Water',500)">
+    <img src="https://images.unsplash.com/photo-1523362628745-0c100150b504">
+    <h3>Water - 500 RWF</h3>
+  </div>
+
+  <div class="card" onclick="add('Wine',15000)">
+    <img src="https://images.unsplash.com/photo-1510626176961-4b57d4fbad03">
+    <h3>Wine - 15,000 RWF</h3>
+  </div>
+
+</div>
+
+<!-- CART -->
+<div class="cart" id="cart">
+  <h2>Purchase Cart</h2>
+  <div id="items"></div>
+  <h3>Total: <span id="total">0</span> RWF</h3>
+</div>
+
+<footer>
+  <p>📞 0796590254</p>
+  <p>📍 Kigali, Rwanda</p>
+</footer>
+
+</div>
+
+<script>
+
+let users = {};
+let cart = [];
+
+/* NAV */
+function showLogin(){
+  document.getElementById("signupPage").style.display="none";
+  document.getElementById("loginPage").style.display="flex";
+}
+
+function showSignup(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("signupPage").style.display="flex";
+}
+
+/* SIGNUP */
+function signup(){
+  let u = document.getElementById("su_user").value;
+  let p = document.getElementById("su_pass").value;
+
+  if(u && p){
+    users[u] = p;
+    alert("Account created! Now login");
+    showLogin();
+  } else {
+    alert("Fill all fields");
+  }
+}
+
+/* LOGIN */
+function login(){
+  let u = document.getElementById("li_user").value;
+  let p = document.getElementById("li_pass").value;
+
+  if(users[u] && users[u] === p){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("app").style.display="block";
+  } else {
+    alert("Wrong login details");
+  }
+}
+
+/* MENU BUTTON = LOGOUT */
+function goMenu(){
+
+  cart = [];
+  document.getElementById("items").innerHTML = "";
+  document.getElementById("total").innerText = "0";
+
+  document.getElementById("app").style.display="none";
+  document.getElementById("loginPage").style.display="flex";
+
+}
+
+/* CART */
+function add(name, price){
+  cart.push({name, price});
+  showCart();
+}
+
+function showCart(){
+
+  let html = "";
+  let total = 0;
+
+  cart.forEach(item=>{
+    html += `<p>${item.name} - ${item.price} RWF</p>`;
+    total += item.price;
+  });
+
+  document.getElementById("items").innerHTML = html;
+  document.getElementById("total").innerText = total;
+
+}
+
+</script>
+
+</body>
+</html>
